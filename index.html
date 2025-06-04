@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multimedia k©</title>
+    <link rel="shortcut icon" href="https://kikiman1212.github.io/modo-oscuro-web/img/k.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+<style>
+   :root {
+    --primary-color: #1db954;
+    --dark-bg: #121212;
+    --light-bg: #181818;
+    --text-color: #ffffff;
+    --text-secondary: #b3b3b3;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--dark-bg);
+    color: var(--text-color);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+/* video de fondo en grande */
+#videoFondo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+}
+
+
+
+
+#matrix-rain {
+    opacity: 0.6; /* Más transparente */
+}
+ #matrix {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+.video-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 2rem auto;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+#videoPlayer {
+    width: 100%;
+   
+    display: block;
+    background: #000;
+}
+
+.player-info {
+    padding: 1.5rem;
+    background: var(--light-bg);
+}
+
+.song-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.artist-name {
+       font-size: 1rem;
+    color: var(--text-secondary);
+    margin: 0.5rem 0 1rem;
+}
+
+.progress-container {
+    width: 100%;
+    height: 6px;
+    background: #535353;
+    border-radius: 3px;
+    margin: 1rem 0;
+    cursor: pointer;
+}
+
+#progresoBarra {
+    width: 100%;
+    height: 100%;
+    appearance: none;
+    background: transparent;
+}
+
+#progresoBarra::-webkit-slider-thumb {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--primary-color);
+    cursor: pointer;
+}
+
+.time-display {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+.controls button {
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.controls button:hover {
+    color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.main-controls {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.main-controls button {
+    font-size: 2rem;
+}
+
+#playButton {
+    background: var(--primary-color);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#volumenBarra {
+    width: 100px;
+    accent-color: var(--primary-color);
+}
+
+footer {
+    margin-top: auto;
+    padding: 2rem;
+    text-align: center;
+    background: var(--light-bg);
+}
+
+/* Estilos base para los íconos */
+.redes-sociales a {
+    color: white; /* Color inicial del texto */
+    text-decoration: none;
+    margin: 0 10px;
+    font-size: 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px; /* Espacio entre el ícono y el texto */
+    transition: color 0.3s ease; /* Transición suave para el color */
+}
+
+/* Estilos para los íconos */
+.redes-sociales .bi {
+    font-size: 20px; /* Tamaño del ícono */
+    transition: color 0.3s ease; /* Transición suave para el ícono */
+}
+
+/* Facebook - Azul (#1877F2) */
+.redes-sociales a[href*="facebook.com"]:hover {
+    color: #1877F2; /* Cambia el color del texto */
+}
+.redes-sociales a[href*="facebook.com"]:hover .bi-facebook {
+    color: #1877F2; /* Cambia el color del ícono */
+}
+
+/* GitHub - Negro (#333) */
+.redes-sociales a[href*="github.com"]:hover {
+    color: #333; /* Cambia el color del texto */
+}
+.redes-sociales a[href*="github.com"]:hover .bi-github {
+    color: #333; /* Cambia el color del ícono */
+}
+
+/* Instagram - Degradado (rosa #E4405F a morado #833AB4) */
+.redes-sociales a[href*="instagram.com"]:hover {
+    color: #E4405F; /* Cambia el color del texto */
+}
+.redes-sociales a[href*="instagram.com"]:hover .bi-instagram {
+    background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%, #d6249f 60%, #285AEB 90%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; /* Aplica el degradado al ícono */
+}
+
+/* YouTube - Rojo (#FF0000) */
+.redes-sociales a[href*="youtube.com"]:hover {
+    color: #FF0000; /* Cambia el color del texto */
+}
+.redes-sociales a[href*="youtube.com"]:hover .bi-youtube {
+    color: #FF0000; /* Cambia el color del ícono */
+}
+
+
+footer p {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+    margin: 0;
+}
+
+/* Estilos para el modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-contenido {
+    background-color: var(--light-bg);
+    padding: 2rem;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+}
+
+.cerrar {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+#listaVideos {
+    list-style: none;
+    padding: 0;
+    margin-top: 1rem;
+}
+
+#listaVideos li {
+    padding: 0.8rem;
+    cursor: pointer;
+    border-bottom: 1px solid #333;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+#listaVideos li:hover {
+    background-color: #2a2a2a;
+}
+
+#listaVideos li i {
+    color: var(--primary-color);
+}
+
+/* Estilo Matrix para el disco */
+        .vinyl-container {
+            position: relative;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto;
+            filter: drop-shadow(0 0 5px #0f0);
+        }
+        
+        .vinyl {
+            width: 80px;
+            height: 80px;
+            background: 
+                radial-gradient(circle, #000 60%, transparent 70%),
+                repeating-radial-gradient(circle at center, 
+                    #000 0%, #000 2%, 
+                    #0f0 2%, #0f0 4%);
+            background-blend-mode: screen;
+            border-radius: 50%;
+            position: relative;
+            border: 2px solid #0f0;
+            box-shadow: 
+                0 0 10px #0f0,
+                inset 0 0 15px #0f0;
+            transition: transform 0.3s ease;
+            display: none;
+        }
+        
+        .vinyl::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 15px;
+            height: 15px;
+            background: #000;
+            border-radius: 50%;
+            border: 2px solid #0f0;
+            box-shadow: 0 0 5px #0f0;
+            z-index: 2;
+        }
+        
+        .vinyl::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 5px;
+            height: 5px;
+            background: #0f0;
+            border-radius: 50%;
+            box-shadow: 0 0 3px #0f0;
+            z-index: 3;
+        }
+        
+        .vinyl-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            background: #000;
+            border-radius: 50%;
+            border: 1px solid #0f0;
+            box-shadow: inset 0 0 5px #0f0;
+        }
+        
+        /* Animación con efecto "glitch" ocasional */
+        .spinning {
+            animation: 
+                spin 1.8s linear infinite,
+                glitch-effect 20s infinite;
+            display: block;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes glitch-effect {
+            0%, 100% { filter: drop-shadow(0 0 5px #0f0); }
+            1% { filter: drop-shadow(-2px -2px 3px #0f0); }
+            2% { filter: drop-shadow(2px 2px 3px #0f0); }
+        }
+        
+        /* Botón estilo Matrix */
+        #playButton {
+            background: transparent;
+            border: 1px solid #0f0;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #0f0;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 10px #0f0;
+            transition: all 0.3s;
+            margin-top: 15px;
+        }
+        
+        #playButton:hover {
+            background: rgba(0, 255, 0, 0.1);
+            box-shadow: 0 0 15px #0f0;
+        }
+        
+        /* Efecto de "scan lines" para el disco */
+        .vinyl::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(
+                to bottom,
+                transparent 0%,
+                rgba(0, 255, 0, 0.2) 50%,
+                transparent 100%
+            );
+            animation: scan 3s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { top: -10px; }
+            100% { top: 90px; }
+        }
+
+        @media screen and (max-width :400px)  {
+            .video-container {
+    position: relative;
+    width: 100%;
+    max-width: 360px;
+    margin: 2rem auto;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+    /* video de fondo en grande */
+    #videoFondo {
+        display: none;
+}
+
+ 
+        }
+
+</style>
+</head>
+<body>
+
+<!--Este es el div contenedor para el efecto Matrix -->
+    <div id="matrix"></div>
+
+      <!-- Video de fondo -->
+    <video id="videoFondo" autoplay muted loop></video>
+
+    
+    <!-- Contenedor principal -->
+    <div class="video-container">
+        <!-- Reproductor de video -->
+        <video id="videoPlayer">
+            <source src="video/video.mp4" type="video/mp4">
+            <img src="ari.gif" alt="">
+            Tu navegador no soporta la etiqueta de video.
+            
+        </video>
+        
+
+
+        <!-- Información de la canción -->
+        <div class="player-info">
+            <h1 class="song-title" id="songTitle">Cipers 5</h1>
+            <p class="artist-name" id="artistName">Pure Neega</p>
+            
+            <!-- Barra de progreso -->
+            <div class="progress-container">
+                <input type="range" id="progresoBarra" min="0" max="100" value="0">
+            </div>
+            
+            <!-- Tiempo -->
+            <div class="time-display">
+                <span id="tiempoActual">00:00</span>
+                <span id="duracionTotal">00:00</span>
+            </div>
+            
+            <!-- Controles principales -->
+            <div class="controls">
+                <button id="anteriorButton" title="Anterior">
+                    <i class="bi bi-skip-start-fill"></i>
+                </button>
+                
+                <div class="main-controls">
+                    <button id="playButton" title="Reproducir">
+                        <i class="bi bi-play-fill"></i>
+                    </button>
+                </div>
+                
+                 <div class="main-controls">
+             <div class="vinyl-container">
+            <div class="vinyl" id="vinyl">
+                <div class="vinyl-label"></div>
+              </div>
+            </div>
+                <button id="siguienteButton" title="Siguiente">
+                    <i class="bi bi-skip-end-fill"></i>
+                </button>
+            </div>
+            
+           
+        </div>
+         <!-- Controles adicionales -->
+            <div class="controls">
+                <button id="cargarVideos" title="Cargar archivo">
+                    <i class="bi bi-folder-plus"></i>
+                </button>
+                
+                <input type="range" id="volumenBarra" min="0" max="1" step="0.1" value="1" title="Volumen">
+                
+                <button id="pantallaCompletaButton" title="Pantalla completa">
+                    <i class="bi bi-fullscreen"></i>
+                </button>
+            </div>
+    </div>
+
+    <!-- Ventana modal para lista de videos -->
+    <div id="modalListaVideos" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar">&times;</span>
+            <h2>Selecciona un video</h2>
+            <ul id="listaVideos"></ul>
+        </div>
+    </div>
+    </div>
+ <!-- Footer para redes sociales -->
+    <footer>
+        <div class="redes-sociales">
+            <a href="https://facebook.com" target="_blank">
+                <i class="bi bi-facebook"></i> Facebook
+            </a>
+            <a href="https://github.com" target="_blank">
+                <i class="bi bi-github"></i> GitHub
+            </a>
+            <a href="https://instagram.com" target="_blank">
+                <i class="bi bi-instagram"></i> Instagram
+            </a>
+            <a href="https://youtube.com" target="_blank">
+                <i class="bi bi-youtube"></i> YouTube
+            </a>
+        </div>
+        <p>&copy; 2025 Kiko. Todos los derechos reservados.</p>
+    </footer>
+   
+   
+     <script>
+        const playButton = document.getElementById('playButton');
+        const vinyl = document.getElementById('vinyl');
+        let isPlaying = false;
+        
+        playButton.addEventListener('click', function() {
+            isPlaying = !isPlaying;
+            
+            if (isPlaying) {
+                playButton.innerHTML = '<i class="bi bi-pause-fill"></i>';
+                vinyl.classList.add('spinning');
+                
+                // Efecto de texto Matrix en el label (opcional)
+                vinyl.querySelector('.vinyl-label').innerHTML = 
+                    '<span style="color:#0f0;font-size:4px;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(90deg);white-space:nowrap;">MATRIX://AUDIO_STREAM</span>';
+            } else {
+                playButton.innerHTML = '<i class="bi bi-play-fill"></i>';
+                vinyl.classList.remove('spinning');
+                vinyl.querySelector('.vinyl-label').innerHTML = '';
+            }
+        });
+
+        document.addEventListener("DOMContentLoaded", function() {
+    // Elementos del DOM
+    const videoPlayer = document.getElementById("videoPlayer");
+    const playButton = document.getElementById("playButton");
+    const progresoBarra = document.getElementById("progresoBarra");
+    const tiempoActual = document.getElementById("tiempoActual");
+    const duracionTotal = document.getElementById("duracionTotal");
+    const listaVideos = document.getElementById("listaVideos");
+    const cargarVideosButton = document.getElementById("cargarVideos");
+    const volumenBarra = document.getElementById("volumenBarra");
+    const pantallaCompletaButton = document.getElementById("pantallaCompletaButton");
+    const anteriorButton = document.getElementById("anteriorButton");
+    const siguienteButton = document.getElementById("siguienteButton");
+    const songTitle = document.getElementById("songTitle");
+    const artistName = document.getElementById("artistName");
+    const modal = document.getElementById('modalListaVideos');
+    const cerrarModal = document.querySelector('.cerrar');
+    const videoFondo = document.getElementById("videoFondo");
+   
+
+
+
+
+
+    // Variables de estado
+    let listaReproduccion = [];
+    let indiceActual = 0;
+    let isPlaying = false;
+    let fileInput = null;
+
+    // Inicializar el input de archivos
+    function initFileInput() {
+        fileInput = document.createElement("input");
+        fileInput.type = "file";
+        fileInput.multiple = true;
+        fileInput.accept = "video/*";
+        fileInput.style.display = "none";
+        document.body.appendChild(fileInput);
+        
+        fileInput.addEventListener("change", function(e) {
+            const archivos = e.target.files;
+            if (archivos.length > 0) {
+                listaReproduccion = Array.from(archivos);
+                cargarListaVideos(listaReproduccion);
+                modal.style.display = 'flex';
+            }
+        });
+    }
+
+    // Cargar lista de videos en el modal
+    function cargarListaVideos(videos) {
+        listaVideos.innerHTML = '';
+        videos.forEach((video, index) => {
+            const li = document.createElement('li');
+            
+            // Crear icono de video
+            const icon = document.createElement('i');
+            icon.className = 'bi bi-file-earmark-play-fill';
+            
+            // Texto con nombre del archivo
+            const fileName = video.name.length > 30 
+                ? video.name.substring(0, 27) + '...' 
+                : video.name;
+            const text = document.createTextNode(' ' + fileName);
+            
+            li.appendChild(icon);
+            li.appendChild(text);
+            li.setAttribute('data-index', index);
+            li.title = video.name;
+            
+            listaVideos.appendChild(li);
+        });
+    }
+
+    // Cargar un video específico
+    function cargarVideo(index) {
+        if (index >= 0 && index < listaReproduccion.length) {
+            indiceActual = index;
+            const video = listaReproduccion[index];
+            const videoURL = URL.createObjectURL(video);
+            videoFondo.src = videoURL;
+            videoFondo.play();
+            // Extraer metadatos del nombre del archivo
+            const fileName = video.name.replace(/\.[^/.]+$/, "");
+            const parts = fileName.split(" - ");
+            if (parts.length >= 2) {
+                artistName.textContent = parts[0];
+                songTitle.textContent = parts.slice(1).join(" - ");
+            } else {
+                songTitle.textContent = fileName;
+                artistName.textContent = "Artista desconocido";
+            }
+            
+            videoPlayer.src = videoURL;
+            videoPlayer.play()
+                .then(() => {
+                    isPlaying = true;
+                    updatePlayButton();
+                })
+                .catch(error => {
+                    console.error("Error al reproducir:", error);
+                });
+        }
+    }
+
+    // Control de reproducción
+    function togglePlay() {
+        if (videoPlayer.paused) {
+            videoPlayer.play()
+                .then(() => {
+                    isPlaying = true;
+                    updatePlayButton();
+                });
+        } else {
+            videoPlayer.pause();
+            isPlaying = false;
+            updatePlayButton();
+        }
+    }
+
+    // Actualizar icono del botón de play/pause
+    function updatePlayButton() {
+        const icon = playButton.querySelector('i');
+        if (isPlaying) {
+            icon.classList.remove('bi-play-fill');
+            icon.classList.add('bi-pause-fill');
+        } else {
+            icon.classList.remove('bi-pause-fill');
+            icon.classList.add('bi-play-fill');
+        }
+    }
+
+    // Event listeners
+    playButton.addEventListener("click", togglePlay);
+    
+    cargarVideosButton.addEventListener("click", function() {
+        if (!fileInput) {
+            initFileInput();
+        }
+        fileInput.value = "";
+        fileInput.click();
+    });
+
+    listaVideos.addEventListener('click', (e) => {
+        if (e.target.tagName === 'LI' || e.target.parentElement.tagName === 'LI') {
+            const li = e.target.tagName === 'LI' ? e.target : e.target.parentElement;
+            const index = parseInt(li.getAttribute('data-index'));
+            cargarVideo(index);
+            videoFondo.play();
+            modal.style.display = 'none';
+        }
+    });
+
+    cerrarModal.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    anteriorButton.addEventListener("click", function() {
+        if (indiceActual > 0) {
+            cargarVideo(indiceActual - 1);
+            videoFondo.play();
+        }
+    });
+
+    siguienteButton.addEventListener("click", function() {
+        if (indiceActual < listaReproduccion.length - 1) {
+            cargarVideo(indiceActual + 1);
+            videoFondo.play();
+        } else if (listaReproduccion.length > 0) {
+            cargarVideo(0);
+        }
+    });
+
+    videoPlayer.addEventListener("ended", function() {
+        if (indiceActual < listaReproduccion.length - 1) {
+            cargarVideo(indiceActual + 1);
+            videoFondo.play();
+        } else if (listaReproduccion.length > 0) {
+            cargarVideo(0);
+        }
+    });
+
+    videoPlayer.addEventListener("timeupdate", function() {
+        if (!isNaN(videoPlayer.duration)) {
+            const progreso = (videoPlayer.currentTime / videoPlayer.duration) * 100;
+            progresoBarra.value = progreso;
+            tiempoActual.textContent = formatearTiempo(videoPlayer.currentTime);
+            duracionTotal.textContent = formatearTiempo(videoPlayer.duration);
+        }
+    });
+
+    progresoBarra.addEventListener("input", function() {
+        const tiempo = (progresoBarra.value / 100) * videoPlayer.duration;
+        videoPlayer.currentTime = tiempo;
+    });
+
+    volumenBarra.addEventListener("input", function() {
+        videoPlayer.volume = volumenBarra.value;
+    });
+
+    pantallaCompletaButton.addEventListener("click", function() {
+        if (videoPlayer.requestFullscreen) {
+            videoPlayer.requestFullscreen();
+        } else if (videoPlayer.webkitRequestFullscreen) {
+            videoPlayer.webkitRequestFullscreen();
+        } else if (videoPlayer.msRequestFullscreen) {
+            videoPlayer.msRequestFullscreen();
+        }
+    });
+
+    // Formatear tiempo (MM:SS)
+    function formatearTiempo(segundos) {
+        const minutos = Math.floor(segundos / 60);
+        const segs = Math.floor(segundos % 60);
+        return `${minutos}:${segs < 10 ? "0" : ""}${segs}`;
+    }
+
+    // Inicializar volumen
+    videoPlayer.volume = volumenBarra.value;
+
+      const matrix = document.getElementById('matrix');
+        const canvas = document.createElement('canvas');
+        matrix.appendChild(canvas);
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const ctx = canvas.getContext('2d');
+        const katakana = 'ア';
+        const latin = 'KIKO';
+        const nums = '1';
+        const alphabet = katakana + latin + nums;
+        
+        const fontSize = 18;
+        const columns = canvas.width / fontSize;
+        
+        const rainDrops = [];
+        
+        for (let x = 0; x < columns; x++) {
+            rainDrops[x] = 1;
+        }
+        
+        const draw = () => {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+            
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                
+                if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        };
+        
+        setInterval(draw, 30);
+        
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+});
+
+
+
+
+
+    </script>
+</body>
+</html>
